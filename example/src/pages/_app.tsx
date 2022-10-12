@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Site Name</title>
+        <title>Surface Signer</title>
         <meta name="description" content="DESCRIPTION" />
         <link
           rel="apple-touch-icon"
