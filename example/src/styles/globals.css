@@ -1,0 +1,15 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.list-disc {
+    /* color: blue; */
+}
+
+a, button {
+    @apply hover:text-purple-700 cursor-pointer
+}
+
+.testing-btn {
+    @apply justify-around my-2 mx-1 text-xs font-sans bg-white hover:bg-gray-100 text-gray-800 py-2 px-4 border border-gray-400 rounded shadow
+}

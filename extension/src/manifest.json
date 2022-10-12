@@ -1,0 +1,21 @@
+{
+  "name": "Surface wallet extension",
+  "manifest_version": 3,
+  "version": "0.1",
+  "description": "Testing surface interactions",
+  "permissions": ["tabs", "activeTab", "scripting", "storage"],
+  "host_permissions": ["*://*/*"],
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": ["index.js"]
+    }
+  ],
+  "web_accessible_resources": [{
+    "resources": ["script.js"],
+    "matches": ["<all_urls>"]
+  }],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

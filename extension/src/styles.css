@@ -1,0 +1,25 @@
+
+@import "./base.css";
+@import "tailwindcss/utilities";
+@import "tailwindcss/components";
+
+/* prefix all selectors to avoid conflicts */
+#mm-signer-app {
+  @apply tw-fixed tw-pointer-events-none;
+}
+
+.mm-signer-wrapper {
+  @apply tw-w-[100vw] tw-h-[100vh] tw-flex tw-justify-end tw-pointer-events-none;
+}
+
+.mm-signer {
+  @apply tw-max-w-[100vw] tw-w-auto tw-bottom-0 tw-font-sans tw-bg-[rgba(255,255,255,0.7)] tw-text-white tw-p-6 tw-mt-auto tw-pointer-events-auto;
+}
+
+.mm-signer:hover:not(.open) {
+  @apply tw-bg-[rgba(251,250,196,0.98)];
+}
+
+.mm-signer.open {
+  @apply tw-w-[100vw] tw-bg-[rgba(248,247,205,0.98)] tw-h-[400px] tw-max-h-[100vh];
+}

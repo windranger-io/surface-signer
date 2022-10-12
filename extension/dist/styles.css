@@ -1,0 +1,580 @@
+/*
+1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
+2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
+*/
+
+#mm-signer-app *,
+#mm-signer-app ::before,
+#mm-signer-app ::after {
+  box-sizing: border-box;
+  /* 1 */
+  border-width: 0;
+  /* 2 */
+  border-style: solid;
+  /* 2 */
+  border-color: #e5e7eb;
+  /* 2 */
+}
+
+#mm-signer-app ::before,
+#mm-signer-app ::after {
+  --tw-content: '';
+}
+
+/*
+1. Use a consistent sensible line-height in all browsers.
+2. Prevent adjustments of font size after orientation changes in iOS.
+3. Use a more readable tab size.
+4. Use the user's configured `sans` font-family by default.
+*/
+
+#mm-signer-app {
+  line-height: 1.5;
+  /* 1 */
+  -webkit-text-size-adjust: 100%;
+  /* 2 */
+  -moz-tab-size: 4;
+  /* 3 */
+  -o-tab-size: 4;
+     tab-size: 4;
+  /* 3 */
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* 4 */
+}
+
+/*
+1. Remove the margin in all browsers.
+2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
+*/
+
+#mm-signer-app {
+  margin: 0;
+  /* 1 */
+  line-height: inherit;
+  /* 2 */
+}
+
+/*
+1. Add the correct height in Firefox.
+2. Correct the inheritance of border color in Firefox. (https://bugzilla.mozilla.org/show_bug.cgi?id=190655)
+3. Ensure horizontal rules are visible by default.
+*/
+
+#mm-signer-app hr {
+  height: 0;
+  /* 1 */
+  color: inherit;
+  /* 2 */
+  border-top-width: 1px;
+  /* 3 */
+}
+
+/*
+Add the correct text decoration in Chrome, Edge, and Safari.
+*/
+
+#mm-signer-app abbr:where([title]) {
+  -webkit-text-decoration: underline dotted;
+          text-decoration: underline dotted;
+}
+
+/*
+Remove the default font size and weight for headings.
+*/
+
+#mm-signer-app h1,
+#mm-signer-app h2,
+#mm-signer-app h3,
+#mm-signer-app h4,
+#mm-signer-app h5,
+#mm-signer-app h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/*
+Reset links to optimize for opt-in styling instead of opt-out.
+*/
+
+#mm-signer-app a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+/*
+Add the correct font weight in Edge and Safari.
+*/
+
+#mm-signer-app b,
+#mm-signer-app strong {
+  font-weight: bolder;
+}
+
+/*
+1. Use the user's configured `mono` font family by default.
+2. Correct the odd `em` font sizing in all browsers.
+*/
+
+#mm-signer-app code,
+#mm-signer-app kbd,
+#mm-signer-app samp,
+#mm-signer-app pre {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
+}
+
+/*
+Add the correct font size in all browsers.
+*/
+
+#mm-signer-app small {
+  font-size: 80%;
+}
+
+/*
+Prevent `sub` and `sup` elements from affecting the line height in all browsers.
+*/
+
+#mm-signer-app sub,
+#mm-signer-app sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+#mm-signer-app sub {
+  bottom: -0.25em;
+}
+
+#mm-signer-app sup {
+  top: -0.5em;
+}
+
+/*
+1. Remove text indentation from table contents in Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=999088, https://bugs.webkit.org/show_bug.cgi?id=201297)
+2. Correct table border color inheritance in all Chrome and Safari. (https://bugs.chromium.org/p/chromium/issues/detail?id=935729, https://bugs.webkit.org/show_bug.cgi?id=195016)
+3. Remove gaps between table borders by default.
+*/
+
+#mm-signer-app table {
+  text-indent: 0;
+  /* 1 */
+  border-color: inherit;
+  /* 2 */
+  border-collapse: collapse;
+  /* 3 */
+}
+
+/*
+1. Change the font styles in all browsers.
+2. Remove the margin in Firefox and Safari.
+3. Remove default padding in all browsers.
+*/
+
+#mm-signer-app button,
+#mm-signer-app input,
+#mm-signer-app optgroup,
+#mm-signer-app select,
+#mm-signer-app textarea {
+  font-family: inherit;
+  /* 1 */
+  font-size: 100%;
+  /* 1 */
+  font-weight: inherit;
+  /* 1 */
+  line-height: inherit;
+  /* 1 */
+  color: inherit;
+  /* 1 */
+  margin: 0;
+  /* 2 */
+  padding: 0;
+  /* 3 */
+}
+
+/*
+Remove the inheritance of text transform in Edge and Firefox.
+*/
+
+#mm-signer-app button,
+#mm-signer-app select {
+  text-transform: none;
+}
+
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Remove default button styles.
+*/
+
+#mm-signer-app button,
+[type='button'],
+[type='reset'],
+[type='submit'] {
+  -webkit-appearance: button;
+  /* 1 */
+  background-color: transparent;
+  /* 2 */
+  background-image: none;
+  /* 2 */
+}
+
+/*
+Use the modern Firefox focus style for all focusable elements.
+*/
+
+#mm-signer-app :-moz-focusring {
+  outline: auto;
+}
+
+/*
+Remove the additional `:invalid` styles in Firefox. (https://github.com/mozilla/gecko-dev/blob/2f9eacd9d3d995c937b4251a5557d95d494c9be1/layout/style/res/forms.css#L728-L737)
+*/
+
+#mm-signer-app :-moz-ui-invalid {
+  box-shadow: none;
+}
+
+/*
+Add the correct vertical alignment in Chrome and Firefox.
+*/
+
+#mm-signer-app progress {
+  vertical-align: baseline;
+}
+
+/*
+Correct the cursor style of increment and decrement buttons in Safari.
+*/
+
+#mm-signer-app ::-webkit-inner-spin-button,
+#mm-signer-app ::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/*
+1. Correct the odd appearance in Chrome and Safari.
+2. Correct the outline style in Safari.
+*/
+
+#mm-signer-app [type='search'] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  outline-offset: -2px;
+  /* 2 */
+}
+
+/*
+Remove the inner padding in Chrome and Safari on macOS.
+*/
+
+#mm-signer-app ::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/*
+1. Correct the inability to style clickable types in iOS and Safari.
+2. Change font properties to `inherit` in Safari.
+*/
+
+#mm-signer-app ::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  /* 1 */
+  font: inherit;
+  /* 2 */
+}
+
+/*
+Add the correct display in Chrome and Safari.
+*/
+
+#mm-signer-app summary {
+  display: list-item;
+}
+
+/*
+Removes the default spacing and border for appropriate elements.
+*/
+
+#mm-signer-app blockquote,
+#mm-signer-app dl,
+#mm-signer-app dd,
+#mm-signer-app h1,
+#mm-signer-app h2,
+#mm-signer-app h3,
+#mm-signer-app h4,
+#mm-signer-app h5,
+#mm-signer-app h6,
+#mm-signer-app hr,
+#mm-signer-app figure,
+#mm-signer-app p,
+#mm-signer-app pre {
+  margin: 0;
+}
+
+#mm-signer-app fieldset {
+  margin: 0;
+  padding: 0;
+}
+
+#mm-signer-app legend {
+  padding: 0;
+}
+
+#mm-signer-app ol,
+#mm-signer-app ul,
+#mm-signer-app menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+Prevent resizing textareas horizontally by default.
+*/
+
+#mm-signer-app textarea {
+  resize: vertical;
+}
+
+/*
+1. Reset the default placeholder opacity in Firefox. (https://github.com/tailwindlabs/tailwindcss/issues/3300)
+2. Set the default placeholder color to the user's configured gray 400 color.
+*/
+
+#mm-signer-app input::-moz-placeholder, #mm-signer-app textarea::-moz-placeholder {
+  opacity: 1;
+  /* 1 */
+  color: #9ca3af;
+  /* 2 */
+}
+
+#mm-signer-app input:-ms-input-placeholder, #mm-signer-app textarea:-ms-input-placeholder {
+  opacity: 1;
+  /* 1 */
+  color: #9ca3af;
+  /* 2 */
+}
+
+#mm-signer-app input::placeholder,
+#mm-signer-app textarea::placeholder {
+  opacity: 1;
+  /* 1 */
+  color: #9ca3af;
+  /* 2 */
+}
+
+/*
+Set the default cursor for buttons.
+*/
+
+#mm-signer-app button,
+#mm-signer-app [role="button"] {
+  cursor: pointer;
+}
+
+/*
+Make sure disabled buttons don't get the pointer cursor.
+*/
+
+#mm-signer-app :disabled {
+  cursor: default;
+}
+
+/*
+1. Make replaced elements `display: block` by default. (https://github.com/mozdevs/cssremedy/issues/14)
+2. Add `vertical-align: middle` to align replaced elements more sensibly by default. (https://github.com/jensimmons/cssremedy/issues/14#issuecomment-634934210)
+   This can trigger a poorly considered lint error in some tools but is included by design.
+*/
+
+#mm-signer-app img,
+#mm-signer-app svg,
+#mm-signer-app video,
+#mm-signer-app canvas,
+#mm-signer-app audio,
+#mm-signer-app iframe,
+#mm-signer-app embed,
+#mm-signer-app object {
+  display: block;
+  /* 1 */
+  vertical-align: middle;
+  /* 2 */
+}
+
+/*
+Constrain images and videos to the parent width and preserve their intrinsic aspect ratio. (https://github.com/mozdevs/cssremedy/issues/14)
+*/
+
+#mm-signer-app img,
+#mm-signer-app video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Make elements with the HTML hidden attribute stay hidden by default */
+
+#mm-signer-app [hidden] {
+  display: none;
+}
+
+#mm-signer-app .tw-relative {
+  position: relative;
+}
+
+#mm-signer-app .tw-sticky {
+  position: -webkit-sticky;
+  position: sticky;
+}
+
+#mm-signer-app .tw-top-0 {
+  top: 0;
+}
+
+#mm-signer-app .tw-my-2 {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+#mm-signer-app .tw-my-8 {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+#mm-signer-app .tw-h-\[296px\] {
+  height: 296px;
+}
+
+#mm-signer-app .tw-w-full {
+  width: 100%;
+}
+
+#mm-signer-app .tw-table-auto {
+  table-layout: auto;
+}
+
+#mm-signer-app .tw-border-collapse {
+  border-collapse: collapse;
+}
+
+#mm-signer-app .tw-overflow-auto {
+  overflow: auto;
+}
+
+#mm-signer-app .tw-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#mm-signer-app .tw-rounded-xl {
+  border-radius: 0.75rem;
+}
+
+#mm-signer-app .tw-border-b {
+  border-bottom-width: 1px;
+}
+
+#mm-signer-app .tw-border-slate-600 {
+  --tw-border-opacity: 1;
+  border-color: rgb(71 85 105 / var(--tw-border-opacity));
+}
+
+#mm-signer-app .tw-border-slate-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(100 116 139 / var(--tw-border-opacity));
+}
+
+#mm-signer-app .tw-bg-\[\#f8f7ce\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(248 247 206 / var(--tw-bg-opacity));
+}
+
+#mm-signer-app .tw-p-4 {
+  padding: 1em;
+}
+
+#mm-signer-app .tw-pl-8 {
+  padding-left: 2em;
+}
+
+#mm-signer-app .tw-pt-0 {
+  padding-top: 0;
+}
+
+#mm-signer-app .tw-pb-3 {
+  padding-bottom: 0.75em;
+}
+
+#mm-signer-app .tw-pr-8 {
+  padding-right: 2em;
+}
+
+#mm-signer-app .tw-text-left {
+  text-align: left;
+}
+
+#mm-signer-app .tw-text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+#mm-signer-app .tw-text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+#mm-signer-app .tw-font-medium {
+  font-weight: 500;
+}
+
+#mm-signer-app .tw-text-slate-800 {
+  --tw-text-opacity: 1;
+  color: rgb(30 41 59 / var(--tw-text-opacity));
+}
+
+#mm-signer-app .tw-shadow-sm {
+  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+/* prefix all selectors to avoid conflicts */
+
+#mm-signer-app {
+  pointer-events: none;
+  position: fixed;
+}
+
+.mm-signer-wrapper {
+  pointer-events: none;
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  justify-content: flex-end;
+}
+
+.mm-signer {
+  pointer-events: auto;
+  bottom: 0;
+  margin-top: auto;
+  width: auto;
+  max-width: 100vw;
+  background-color: rgba(255,255,255,0.7);
+  padding: 1.5em;
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.mm-signer:hover:not(.open) {
+  background-color: rgba(251,250,196,0.98);
+}
+
+.mm-signer.open {
+  height: 400px;
+  max-height: 100vh;
+  width: 100vw;
+  background-color: rgba(248,247,205,0.98);
+}
