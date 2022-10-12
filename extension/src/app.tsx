@@ -46,7 +46,10 @@ export default function App() {
           type: "get_domains_history",
         },
         (_history) => {
-          setHistory(_history.history);
+          // we're never going to change domain, this number should only go up
+          if (Object.keys(_history.history).length) {
+            setHistory(_history.history);
+          }
           resolve(_history.history);
         }
       );

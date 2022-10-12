@@ -186,8 +186,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     var async = false;
     // extract domain from the sender
     var domain = new URL(sender.url).host;
-    console.log(domain);
-    console.log(sender.url);
+    // attempt the call (* note async reqs check !chrome.runtime.lastError to avoid errors bubbling to console)
     try {
         switch (request.type) {
             case "get_domains_history":
@@ -195,13 +194,13 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                 sendResponse({
                     history: Object.keys(_history)
                         .filter(function (session) {
-                        return Object.values(_history[session]).filter(function (history) { return history.domain === domain; }).length > 0;
+                        return Object.values(_history["".concat(session)]).filter(function (history) { return history.domain === domain; }).length > 0;
                     })
                         .reduce(function (sessions, session) {
                         // eslint-disable-next-line no-param-reassign
-                        sessions[session] = _history[session].map(function (item) {
+                        sessions["".concat(session)] = _history["".concat(session)].map(function (item) {
                             var out = __assign({}, item);
-                            if (_sessions[session].revoked) {
+                            if (_sessions["".concat(session)].revoked) {
                                 out.revoked = true;
                             }
                             return out;
@@ -215,7 +214,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                 sendResponse({
                     history: Object.keys(_history)
                         .filter(function (session) {
-                        return Object.values(_history[session]).filter(function (history) {
+                        return Object.values(_history["".concat(session)]).filter(function (history) {
                             return history.domain === domain &&
                                 new Date(history.expirationTime).getTime() >
                                     new Date().getTime();
@@ -223,9 +222,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                     })
                         .reduce(function (sessions, session) {
                         // eslint-disable-next-line no-param-reassign
-                        sessions[session] = _history[session].map(function (item) {
+                        sessions["".concat(session)] = _history["".concat(session)].map(function (item) {
                             var out = __assign({}, item);
-                            if (_sessions[session].revoked) {
+                            if (_sessions["".concat(session)].revoked) {
                                 out.revoked = true;
                             }
                             return out;
@@ -342,7 +341,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                         // when verified, store the session...
                         if (verified) {
                             // eslint-disable-next-line prefer-destructuring
-                            session = crypto.getRandomValues(new Uint32Array(1))[0];
+                            session = "".concat(crypto.getRandomValues(new Uint32Array(1))[0]);
                             // if the signature verifies, then store the signature into sessions
                             _sessions[session] = {
                                 msg: msg,
@@ -379,8 +378,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                     return __generator(this, function (_a) {
                         session = request.detail.session;
                         // when session is valid...
-                        if (_sessions[session]) {
-                            _sessions[session].revoked = true;
+                        if (_sessions["".concat(session)]) {
+                            _sessions["".concat(session)].revoked = true;
                         }
                         // update stored state
                         chrome.storage.local.set({
@@ -390,7 +389,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                             if (!chrome.runtime.lastError) {
                                 // let the sender know we revoked the session
                                 sendResponse({
-                                    revoked: !!((_a = _sessions[session]) === null || _a === void 0 ? void 0 : _a.revoked),
+                                    revoked: !!((_a = _sessions["".concat(session)]) === null || _a === void 0 ? void 0 : _a.revoked),
                                 });
                             }
                         });
@@ -407,10 +406,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                             case 0:
                                 error = false;
                                 _a = request.detail, session = _a.session, rawMsg = _a.msg;
-                                if (!_sessions[session]) return [3 /*break*/, 11];
-                                if (!(_sessions[session].domain === domain)) return [3 /*break*/, 9];
-                                if (!!_sessions[session].revoked) return [3 /*break*/, 7];
-                                _b = _sessions[session], signer = _b.signer, delegator = _b.delegator, expirationTime = _b.expirationTime, delegation = _b.msg, sessionSignature = _b.signature;
+                                if (!_sessions["".concat(session)]) return [3 /*break*/, 11];
+                                if (!(_sessions["".concat(session)].domain === domain)) return [3 /*break*/, 9];
+                                if (!!_sessions["".concat(session)].revoked) return [3 /*break*/, 7];
+                                _b = _sessions["".concat(session)], signer = _b.signer, delegator = _b.delegator, expirationTime = _b.expirationTime, delegation = _b.msg, sessionSignature = _b.signature;
                                 msg = "".concat(rawMsg, "\n\nAuthenticated: ").concat(sessionSignature);
                                 return [4 /*yield*/, keyringController.getAccounts()];
                             case 1:
@@ -437,8 +436,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                                 // check for session validity (code + expiry)
                                 if (new Date().getTime() < new Date(expirationTime).getTime()) {
                                     // record message signing into history
-                                    _history[session] = _history[session] || [];
-                                    _history[session].push({
+                                    _history["".concat(session)] = _history["".concat(session)] || [];
+                                    _history["".concat(session)].push({
                                         msg: msg,
                                         delegation: delegation,
                                         signer: signer,
@@ -458,7 +457,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                                     }, function () {
                                         if (!chrome.runtime.lastError) {
                                             // respond with signed message
-                                            sendResponse(_history[session][_history[session].length - 1]);
+                                            sendResponse(_history["".concat(session)][_history["".concat(session)].length - 1]);
                                         }
                                     });
                                 }

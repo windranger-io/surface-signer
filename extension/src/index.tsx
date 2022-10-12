@@ -9,11 +9,12 @@ import App from "./app";
 // IIFE to scope context
 (async () => {
   // This function handles any unhandled promise rejections
-  window.onunhandledrejection = (event: any) => {
+  window.onunhandledrejection = (event: Event) => {
     // nooop...
     ((ev) => ev)(event);
   };
 
+  // onscreen notifications that are currently open
   const openNotifications = [];
 
   // create a random eventId to join injected script with the content-script context
@@ -24,14 +25,14 @@ import App from "./app";
   script.id = "signer-injection";
   document.documentElement.appendChild(script);
 
-  // add event listener to catch messages from injected script
+  // add event listener to catch messages from injected script (users context)
   document.addEventListener(
     eventId.toString(),
     function registerSeed(seed: CustomEvent) {
       // on initial welcome we will get a new customEvent to use (newEvent)
       const { newEvent } = seed.detail || false;
 
-      // welcome message provided newEvent id
+      // when we get the welcome message...
       if (newEvent) {
         // attach to the newEvent and listen for future reqs from the injected script
         document.addEventListener(newEvent.toString(), (event: CustomEvent) => {
@@ -73,16 +74,18 @@ import App from "./app";
                             `Issued At: ${issuedAt.toISOString()}\n` +
                             `Expiration Time: ${expiry.toISOString()}`;
 
-                          // sign and verify the recovered signer
+                          // sign and verify with the selected signer
+                          // - we could pass back to the window now and let this sig happen in users context
+                          // - this would let us operate against ANY wallet provider that can offer signing
+                          // - we would just need to loopback with CustomEvents to join the two sides
                           await web3.eth.personal
                             .sign(msg, accounts[0], null)
-                            .then((sig: any) => {
+                            .then((sig: string) => {
                               // double check the signature is valid...
                               const whoSigned = web3.eth.accounts.recover(
                                 msg,
                                 sig
                               );
-
                               // save details to background
                               chrome.runtime.sendMessage(
                                 {
@@ -109,12 +112,12 @@ import App from "./app";
                               );
                             })
                             // throw exception to caller
-                            .catch((e: any) => reject(e));
+                            .catch((e: Error) => reject(e));
                         }
                       }
                     );
                   }).then((details) => {
-                    // dispatch welcome message to move customEvent
+                    // respond on the newSessionListenerId with the results of calling bgs new_session
                     document.dispatchEvent(
                       new CustomEvent(newSessionListenerId, {
                         detail: details,
@@ -128,7 +131,7 @@ import App from "./app";
                 (async () => {
                   // get the response listenerId
                   const { signMessageListenerId } = event.detail;
-                  // actual process for signing a message...
+                  // actual process for signing a message (we can call it immediately or delay it with a dialogue)...
                   const processSignMessage = (ev: CustomEvent) => {
                     // save details to background
                     chrome.runtime.sendMessage(
@@ -142,7 +145,7 @@ import App from "./app";
                       },
                       (res) => {
                         if (!chrome.runtime.lastError) {
-                          // dispatch welcome message to move customEvent
+                          // respond on signMessageListenerId to pass result of bgs sign_message
                           document.dispatchEvent(
                             new CustomEvent(signMessageListenerId, {
                               detail: res,
@@ -155,7 +158,7 @@ import App from "./app";
                   };
                   // if we have a specific target...
                   if (event.target !== document) {
-                    // get position on screen
+                    // get position on screen (this could move - we should reposition on window.resize)
                     const pos = (
                       event.target as HTMLElement
                     ).getBoundingClientRect();
@@ -166,6 +169,7 @@ import App from "./app";
                       target: event.target,
                       detail: event.detail,
                       sign: () => {
+                        // respond on signMessageListenerId to pass result of bgs sign_message
                         processSignMessage(event);
                         openNotifications.splice(
                           openNotifications.indexOf(ev),
@@ -173,7 +177,7 @@ import App from "./app";
                         );
                       },
                       reject: () => {
-                        // dispatch welcome message to move customEvent
+                        // respond on signMessageListenerId to notify window context of rejection
                         document.dispatchEvent(
                           new CustomEvent(signMessageListenerId, {
                             detail: {
@@ -242,7 +246,7 @@ import App from "./app";
                       "style",
                       `display: flex; flex-direction: row; justify-content: space-around;`
                     );
-                    // this needs to be wrapped in a shadow and injected with a reset to work properly...
+                    // wrap buttons in a flex container
                     approve.setAttribute("class", `panel-btn`);
                     reject.setAttribute("class", `panel-btn`);
                     // msg text
@@ -259,8 +263,9 @@ import App from "./app";
                       ev.reject();
                       document.body.removeChild(panel);
                     });
-                    // attach into closed shadow
+                    // contain in a closed shadow (this will prevent the users context from accessing the notifications dom)
                     const shadow = panel.attachShadow({ mode: "closed" });
+                    // insert everything in to the shadow container
                     btns.appendChild(reject);
                     btns.appendChild(approve);
                     shadow.appendChild(styles);
@@ -269,6 +274,7 @@ import App from "./app";
                     // put everything in the dom
                     document.body.appendChild(panel);
                   } else {
+                    // sign the message immediately...
                     processSignMessage(event);
                   }
                 })();
@@ -283,14 +289,14 @@ import App from "./app";
           }
         });
 
-        // Insert container as a sibling to the body
+        // Insert container as a sibling to the body (this puts it outside of any styled containers (hopefully))
         const signer = document.createElement("signer-io");
         document.body.parentElement.appendChild(signer);
 
         // Attach a shadow dom to the signer container (by setting closed we can block window from accessing the shadow)
         const shadow = signer.attachShadow({ mode: "closed" });
 
-        // Attach styles to shadow dom
+        // Attach styles to shadow dom (to reset em sizing)
         const style = document.createElement("style");
         style.innerHTML = `
           html,
@@ -315,10 +321,12 @@ import App from "./app";
         `;
         shadow.appendChild(style);
 
+        // insert the shadow
         const app = document.createElement("div");
         app.setAttribute("id", "mm-signer-app");
         shadow.appendChild(app);
 
+        // attach react app (management panel)
         const root = createRoot(app!);
         root.render(<App />);
 

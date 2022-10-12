@@ -122,9 +122,8 @@ chrome.runtime.onMessage.addListener(
     let async = false;
     // extract domain from the sender
     const domain = new URL(sender.url).host;
-    console.log(domain);
-    console.log(sender.url);
 
+    // attempt the call (* note async reqs check !chrome.runtime.lastError to avoid errors bubbling to console)
     try {
       switch (request.type) {
         case "get_domains_history":
@@ -133,19 +132,21 @@ chrome.runtime.onMessage.addListener(
             history: Object.keys(_history)
               .filter(
                 (session: string) =>
-                  Object.values(_history[session]).filter(
+                  Object.values(_history[`${session}`]).filter(
                     (history: { domain: string }) => history.domain === domain
                   ).length > 0
               )
               .reduce((sessions, session) => {
                 // eslint-disable-next-line no-param-reassign
-                sessions[session] = _history[session].map((item) => {
-                  const out = { ...item };
-                  if (_sessions[session].revoked) {
-                    out.revoked = true;
+                sessions[`${session}`] = _history[`${session}`].map(
+                  (item: Record<string, unknown>) => {
+                    const out = { ...item };
+                    if (_sessions[`${session}`].revoked) {
+                      out.revoked = true;
+                    }
+                    return out;
                   }
-                  return out;
-                });
+                );
                 return sessions;
               }, {}),
           });
@@ -156,7 +157,7 @@ chrome.runtime.onMessage.addListener(
             history: Object.keys(_history)
               .filter(
                 (session: string) =>
-                  Object.values(_history[session]).filter(
+                  Object.values(_history[`${session}`]).filter(
                     (history: {
                       domain: string;
                       issuedAt: string;
@@ -169,13 +170,15 @@ chrome.runtime.onMessage.addListener(
               )
               .reduce((sessions, session) => {
                 // eslint-disable-next-line no-param-reassign
-                sessions[session] = _history[session].map((item) => {
-                  const out = { ...item };
-                  if (_sessions[session].revoked) {
-                    out.revoked = true;
+                sessions[`${session}`] = _history[`${session}`].map(
+                  (item: Record<string, unknown>) => {
+                    const out = { ...item };
+                    if (_sessions[`${session}`].revoked) {
+                      out.revoked = true;
+                    }
+                    return out;
                   }
-                  return out;
-                });
+                );
                 return sessions;
               }, {}),
           });
@@ -276,7 +279,7 @@ chrome.runtime.onMessage.addListener(
           async = true;
           (async () => {
             // sessionID generated if valid
-            let session: number | false = false;
+            let session: string | false = false;
             // extract message details (need code, domain and expiry information here...)
             const {
               code,
@@ -308,7 +311,7 @@ chrome.runtime.onMessage.addListener(
             // when verified, store the session...
             if (verified) {
               // eslint-disable-next-line prefer-destructuring
-              session = crypto.getRandomValues(new Uint32Array(1))[0];
+              session = `${crypto.getRandomValues(new Uint32Array(1))[0]}`;
               // if the signature verifies, then store the signature into sessions
               _sessions[session] = {
                 msg,
@@ -346,8 +349,8 @@ chrome.runtime.onMessage.addListener(
             const { session } = request.detail;
 
             // when session is valid...
-            if (_sessions[session]) {
-              _sessions[session].revoked = true;
+            if (_sessions[`${session}`]) {
+              _sessions[`${session}`].revoked = true;
             }
 
             // update stored state
@@ -359,7 +362,7 @@ chrome.runtime.onMessage.addListener(
                 if (!chrome.runtime.lastError) {
                   // let the sender know we revoked the session
                   sendResponse({
-                    revoked: !!_sessions[session]?.revoked,
+                    revoked: !!_sessions[`${session}`]?.revoked,
                   });
                 }
               }
@@ -376,11 +379,11 @@ chrome.runtime.onMessage.addListener(
             const { session, msg: rawMsg } = request.detail;
 
             // when session is valid...
-            if (_sessions[session]) {
+            if (_sessions[`${session}`]) {
               // check that the session matches the senders domain...
-              if (_sessions[session].domain === domain) {
+              if (_sessions[`${session}`].domain === domain) {
                 // not revoked
-                if (!_sessions[session].revoked) {
+                if (!_sessions[`${session}`].revoked) {
                   // extract details from session
                   const {
                     signer,
@@ -388,7 +391,7 @@ chrome.runtime.onMessage.addListener(
                     expirationTime,
                     msg: delegation,
                     signature: sessionSignature,
-                  } = _sessions[session];
+                  } = _sessions[`${session}`];
 
                   // construct the message to sign
                   const msg = `${rawMsg}\n\nAuthenticated: ${sessionSignature}`;
@@ -419,8 +422,8 @@ chrome.runtime.onMessage.addListener(
                     new Date().getTime() < new Date(expirationTime).getTime()
                   ) {
                     // record message signing into history
-                    _history[session] = _history[session] || [];
-                    _history[session].push({
+                    _history[`${session}`] = _history[`${session}`] || [];
+                    _history[`${session}`].push({
                       msg,
                       delegation,
                       signer,
@@ -443,7 +446,9 @@ chrome.runtime.onMessage.addListener(
                         if (!chrome.runtime.lastError) {
                           // respond with signed message
                           sendResponse(
-                            _history[session][_history[session].length - 1]
+                            _history[`${session}`][
+                              _history[`${session}`].length - 1
+                            ]
                           );
                         }
                       }

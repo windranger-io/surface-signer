@@ -82,7 +82,7 @@ const Instructions = () => {
         <li>Install the extension by navigating to <code>chrome://extensions</code> (copy and paste, we can&apos;t link to this page)</li>
       </div>
       <div className="block list-disc list-inside">
-        <li>Click <code>Load unpacked</code> and select <code>./extension/dist</code> </li>
+        <li>Toggle on <code>developer mode</code> then click <code>Load unpacked</code> and select <code>./extension/dist</code> </li>
       </div>
       <div className="block list-disc list-inside">
         <li>Navigate back here, refresh the page and then click -&gt; <button onClick={newSession}>Approve session</button> {session ? `✅` : ``}</li>
