@@ -1,0 +1,22 @@
+{  
+  "compilerOptions": {
+    "jsx": "react",
+    "esModuleInterop": true,
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es5",
+    "downlevelIteration": true,
+    "moduleResolution": "node",
+    "noEmitHelpers": false,
+    "sourceMap": true,
+    "outDir": "dist",
+    "allowJs": true,
+    "baseUrl": "src",
+    "paths": {
+      "*": ["../node_modules/*", "node_modules/*"]
+    },
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src/*"]
+}
